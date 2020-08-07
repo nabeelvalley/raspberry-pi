@@ -1,12 +1,14 @@
 from picamera import PiCamera
 from time import sleep, time
+from os import path, getcwd
 
 def full_image_path(filename: str) -> str:
     """
-    Get full path for image file given the file name
+    Get full path for a file to be palced in the `out` directory given the file name
     """
-    pictures_root = '/home/pi/Pictures/'
-    return pictures_root + filename
+    working_dir = path.abspath(getcwd())
+    file_path = path.join(working_dir, 'out', filename)
+    return file_path
     
 
 def configure_camera() -> PiCamera:
@@ -25,10 +27,11 @@ def take_picture() -> None:
     """
     Take a picture using the current unix time as the file name
     """
-    camera = configure_camera()
     filename = str(time()) + '.jpg'
     image_path = full_image_path(filename)
-    camera.capture(image_path)
+    
+    configure_camera().capture(image_path)
+
     print('Image saved to ' + image_path)
 
 if __name__ == '__main__':
