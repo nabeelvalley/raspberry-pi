@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pi, What's Up?</title>
+</head>
+<body>
+    <h1>Pi, What's Up?</h1>
+    <img src="{{ url_for('camera_feed') }}"/>
+    
+    <div id="actions">
+        <button onclick="getPrediction()">What do you See?</button>
+    </div>
+
+    <div id="predictions">
+
+    </div>
+
+    <p id="prediction" ></p>
+
+    <script>
+        const getPrediction = async() => {
+            const data = await fetch("{{ url_for('camera_predict') }}")
+            const json = await data.text()
+            console.info(json)
+
+            const now = new Date().toLocaleTimeString()
+
+            document.getElementById('prediction').innerHTML += 
+                `<p class="prediction">${now}: ${json}</p>`
+        }
+    </script>
+    
+</body>
+</html>
